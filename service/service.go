@@ -9,12 +9,11 @@ package service
 import (
 	"blog/conf"
 	"blog/dao"
-	"blog/proto"
+
 )
 
 type Service struct {
 	dao *dao.Dao
-	HelloService proto.HelloService
 }
 
 func New(c *conf.Config) (s *Service) {

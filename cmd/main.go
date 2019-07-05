@@ -11,7 +11,7 @@ import (
 	"blog/server/http"
 	"blog/service"
 	"github.com/freezeChen/studio-library/zlog"
-	"github.com/micro/go-web"
+	"github.com/micro/go-micro/web"
 )
 
 func main() {
