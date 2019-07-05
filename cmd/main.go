@@ -24,7 +24,7 @@ func main() {
 
 	svc := web.NewService(
 		web.Name("go.micro.web.hello"),
-		web.Address(":8080"))
+		web.Address(":8081"))
 	svc.Init()
 	//helloService := proto.NewHelloService("go.micro.srv.hello", client.DefaultClient)
 	s := service.New(cfg)

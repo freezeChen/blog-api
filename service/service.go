@@ -1,6 +1,6 @@
 /*
    @Time : 2019-06-28 13:49:25
-   @Author : 
+   @Author :
    @File : service
    @Software: blog
 */
@@ -9,7 +9,7 @@ package service
 import (
 	"blog/conf"
 	"blog/dao"
-
+	"blog/model"
 )
 
 type Service struct {
@@ -23,4 +23,10 @@ func New(c *conf.Config) (s *Service) {
 	return s
 }
 
+func (s Service) GetHomeList(page *model.Page) ([]*model.Article, error) {
+	return s.dao.GetHomeList(page)
+}
 
+func (s Service) GetHomePageIndex(page *model.Page) int {
+	return s.dao.GetHomePageIndex(page)
+}

@@ -9,8 +9,8 @@ package http
 import (
 	"blog/model"
 	"blog/service"
+	"github.com/freezeChen/studio-library/middle"
 	"github.com/gin-gonic/gin"
-
 	"time"
 )
 
@@ -18,21 +18,40 @@ var (
 	svc *service.Service
 )
 
+type Controller struct {
+	model.JsonResult
+}
+
 func New(s *service.Service) (engine *gin.Engine) {
 	engine = gin.Default()
 	svc = s
+	engine.Use(middle.CORSMiddleware())
+
 	initRouter(engine)
 	return
 }
 
 func initRouter(e *gin.Engine) {
+	c := &Controller{}
+
 	g := e.Group("/")
 	{
-		g.GET("/getHomeList", getHomeList)
+		g.GET("/getHomeList", c.getHomeList)
+
 	}
 }
 
-func getHomeList(ctx *gin.Context) {
+func (self Controller) getHomeList(ctx *gin.Context) {
+	defer func() {
+		self.Response(ctx)
+	}()
+	var param model.Page
+
+	if err := ctx.ShouldBind(&param); err != nil {
+		self.Msg = "参数校验失败"
+		return
+	}
+
 	var list = make([]*model.Article, 0)
 
 	list = append(list, &model.Article{
@@ -46,14 +65,25 @@ func getHomeList(ctx *gin.Context) {
 
 	list = append(list, &model.Article{
 		Id:       2,
-		Title:    detail,
-		Detail:   "java 内容",
+		Title:    "我是标题",
+		Detail:   detail,
 		Language: "Java",
 		Author:   "freeze",
 		Time:     time.Now().Format("2006年01月02日"),
 	})
 
 	ctx.JSON(200, list)
+
+}
+
+func (self Controller) getHomePageIndex(ctx *gin.Context) {
+	var param model.Page
+
+	if err := ctx.ShouldBind(&param); err != nil {
+		//ctx.JSON()
+		self.Msg = "参数校验失败"
+		return
+	}
 
 }
 
