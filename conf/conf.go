@@ -26,7 +26,9 @@ func Init() (*Config, error) {
 	cfg := config.NewConfig()
 
 	source := conf.LoadFileSource(util.GetCurrentDirectory() + "/conf.yaml")
-	cfg.Load(source)
+	if err := cfg.Load(source); err != nil {
+		return nil, err
+	}
 	if err := cfg.Scan(Conf); err != nil {
 		return nil, err
 	}

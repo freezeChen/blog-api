@@ -10,8 +10,10 @@ import (
 	"blog/conf"
 	"blog/server/http"
 	"blog/service"
+	"fmt"
 	"github.com/freezeChen/studio-library/zlog"
 	"github.com/micro/go-micro/web"
+	"time"
 )
 
 func main() {
@@ -20,15 +22,16 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Println(fmt.Sprintf("%+v",cfg))
 	zlog.InitLogger(cfg.Log)
 
 	svc := web.NewService(
 		web.Name("go.micro.web.hello"),
-		web.Address(":8081"))
+		web.Address(":8081"),
+		web.RegisterTTL(30*time.Second),
+		web.RegisterInterval(20*time.Second))
 	svc.Init()
-	//helloService := proto.NewHelloService("go.micro.srv.hello", client.DefaultClient)
 	s := service.New(cfg)
-	//s.HelloService = helloService
 	engine := http.New(s)
 	svc.Handle("/", engine)
 	if err := svc.Run(); err != nil {
